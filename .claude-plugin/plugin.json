@@ -1,0 +1,8 @@
+{
+  "name": "eval-protocol",
+  "description": "Tiered acceptance criteria, frozen baselines and a canary rule for evaluating LLM agents: set up, stabilise and audit an evaluation.",
+  "version": "0.1.0",
+  "author": { "name": "Ivan de Murard" },
+  "license": "MIT",
+  "repository": "https://github.com/IvandeMurard/eval-protocol"
+}

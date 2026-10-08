@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eval-protocol"
+version = "0.1.0"
+description = "Tiered acceptance criteria, frozen baselines and a canary rule for LLM evaluation. Standard library only."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+authors = [{ name = "Ivan de Murard" }]
+dependencies = []
+
+[project.scripts]
+eval-protocol = "eval_protocol.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

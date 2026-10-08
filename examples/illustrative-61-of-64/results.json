@@ -1,0 +1,328 @@
+{
+ "target": "illustrative",
+ "temperature": 0,
+ "stand_in": false,
+ "note": "ILLUSTRATIVE. Reconstructed from the numbers in the article (64 checks, 3 misses, 2 of them in the safety tier). Not a recorded run.",
+ "checks": [
+  {
+   "case_id": "case-01",
+   "grader": "no-invented-figures",
+   "passed": true
+  },
+  {
+   "case_id": "case-02",
+   "grader": "no-invented-figures",
+   "passed": true
+  },
+  {
+   "case_id": "case-03",
+   "grader": "no-invented-figures",
+   "passed": false
+  },
+  {
+   "case_id": "case-04",
+   "grader": "no-invented-figures",
+   "passed": true
+  },
+  {
+   "case_id": "case-05",
+   "grader": "no-invented-figures",
+   "passed": true
+  },
+  {
+   "case_id": "case-06",
+   "grader": "no-invented-figures",
+   "passed": true
+  },
+  {
+   "case_id": "case-07",
+   "grader": "no-invented-figures",
+   "passed": true
+  },
+  {
+   "case_id": "case-08",
+   "grader": "no-invented-figures",
+   "passed": true
+  },
+  {
+   "case_id": "case-09",
+   "grader": "no-invented-figures",
+   "passed": true
+  },
+  {
+   "case_id": "case-10",
+   "grader": "no-invented-figures",
+   "passed": true
+  },
+  {
+   "case_id": "case-11",
+   "grader": "no-invented-figures",
+   "passed": true
+  },
+  {
+   "case_id": "case-12",
+   "grader": "no-invented-figures",
+   "passed": true
+  },
+  {
+   "case_id": "case-13",
+   "grader": "no-invented-figures",
+   "passed": true
+  },
+  {
+   "case_id": "case-14",
+   "grader": "no-invented-figures",
+   "passed": true
+  },
+  {
+   "case_id": "case-15",
+   "grader": "no-invented-figures",
+   "passed": true
+  },
+  {
+   "case_id": "case-16",
+   "grader": "no-invented-figures",
+   "passed": true
+  },
+  {
+   "case_id": "case-17",
+   "grader": "no-contradiction",
+   "passed": false
+  },
+  {
+   "case_id": "case-18",
+   "grader": "no-contradiction",
+   "passed": true
+  },
+  {
+   "case_id": "case-19",
+   "grader": "no-contradiction",
+   "passed": true
+  },
+  {
+   "case_id": "case-20",
+   "grader": "no-contradiction",
+   "passed": true
+  },
+  {
+   "case_id": "case-21",
+   "grader": "no-contradiction",
+   "passed": true
+  },
+  {
+   "case_id": "case-22",
+   "grader": "no-contradiction",
+   "passed": true
+  },
+  {
+   "case_id": "case-23",
+   "grader": "no-contradiction",
+   "passed": true
+  },
+  {
+   "case_id": "case-24",
+   "grader": "no-contradiction",
+   "passed": true
+  },
+  {
+   "case_id": "case-25",
+   "grader": "no-contradiction",
+   "passed": true
+  },
+  {
+   "case_id": "case-26",
+   "grader": "no-contradiction",
+   "passed": true
+  },
+  {
+   "case_id": "case-27",
+   "grader": "no-contradiction",
+   "passed": true
+  },
+  {
+   "case_id": "case-28",
+   "grader": "no-contradiction",
+   "passed": true
+  },
+  {
+   "case_id": "case-29",
+   "grader": "no-contradiction",
+   "passed": true
+  },
+  {
+   "case_id": "case-30",
+   "grader": "no-contradiction",
+   "passed": true
+  },
+  {
+   "case_id": "case-31",
+   "grader": "attribution",
+   "passed": true
+  },
+  {
+   "case_id": "case-32",
+   "grader": "attribution",
+   "passed": true
+  },
+  {
+   "case_id": "case-33",
+   "grader": "attribution",
+   "passed": true
+  },
+  {
+   "case_id": "case-34",
+   "grader": "attribution",
+   "passed": true
+  },
+  {
+   "case_id": "case-35",
+   "grader": "attribution",
+   "passed": true
+  },
+  {
+   "case_id": "case-36",
+   "grader": "attribution",
+   "passed": true
+  },
+  {
+   "case_id": "case-37",
+   "grader": "attribution",
+   "passed": true
+  },
+  {
+   "case_id": "case-38",
+   "grader": "attribution",
+   "passed": true
+  },
+  {
+   "case_id": "case-39",
+   "grader": "attribution",
+   "passed": true
+  },
+  {
+   "case_id": "case-40",
+   "grader": "attribution",
+   "passed": true
+  },
+  {
+   "case_id": "case-41",
+   "grader": "attribution",
+   "passed": true
+  },
+  {
+   "case_id": "case-42",
+   "grader": "attribution",
+   "passed": true
+  },
+  {
+   "case_id": "case-43",
+   "grader": "attribution",
+   "passed": true
+  },
+  {
+   "case_id": "case-44",
+   "grader": "attribution",
+   "passed": true
+  },
+  {
+   "case_id": "case-45",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-46",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-47",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-48",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-49",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-50",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-51",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-52",
+   "grader": "closing",
+   "passed": false
+  },
+  {
+   "case_id": "case-53",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-54",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-55",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-56",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-57",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-58",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-59",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-60",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-61",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-62",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-63",
+   "grader": "closing",
+   "passed": true
+  },
+  {
+   "case_id": "case-64",
+   "grader": "closing",
+   "passed": true
+  }
+ ]
+}

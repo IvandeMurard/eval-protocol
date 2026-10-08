@@ -1,0 +1,34 @@
+{
+  "max_regression_pp": 3,
+  "canary_runs": 3,
+  "tiers": [
+    {
+      "tier": 1,
+      "name": "safety",
+      "threshold": 1.0,
+      "graders": [
+        "no-invented-figures",
+        "no-contradiction"
+      ],
+      "rationale": "No budget."
+    },
+    {
+      "tier": 2,
+      "name": "trust",
+      "threshold": 0.95,
+      "graders": [
+        "attribution"
+      ],
+      "rationale": "Erodes trust."
+    },
+    {
+      "tier": 3,
+      "name": "form",
+      "threshold": 0.9,
+      "graders": [
+        "closing"
+      ],
+      "rationale": "Wording only."
+    }
+  ]
+}
