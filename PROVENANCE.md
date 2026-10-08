@@ -11,8 +11,11 @@ Where each mechanism comes from. Two systems by the same author, one public, one
 | Canary rule corrected to "0.00 points on tier 1 only" | Lore | Section 7 of the article |
 | `failure_trigger` on every case | Aetherix | `eval/golden_dataset.jsonl`, `scripts/eval/validate_dataset.py` |
 | Graders as pure functions, offline regression suite of known-bad answers | Lore | `frontend/evals/README.md` |
+| Path-triggered selection, sha256 cache of touched files, `eval-exempt` label (v0.2) | Aetherix | `scripts/ci/check_eval_coverage.py`, described publicly in [EVAL_GATE.md](https://github.com/IvandeMurard/Hospitality-Multi-agent-Architecture/blob/main/EVAL_GATE.md) |
+| Coverage counted by category, with warn and fail floors (v0.2) | Aetherix | same file; the 80% and 60% defaults are Aetherix's |
+| Six-question diagnostic (`eval-diagnose`, v0.2) | The article | its self-diagnostic block |
 
-What the Aetherix repository does that is **not** ported: path-triggered gating with a sha256 cache and an `eval-exempt` label, category coverage, sticky pull-request comment, judge calibration (kappa), drift tests, interval calibration. Aetherix's own measurements run on a synthetic series and a stand-in parser; see the article.
+What the Aetherix repository does that is **not** ported: sticky pull-request comment, judge calibration (kappa), drift tests, interval calibration. Aetherix's own measurements run on a synthetic series and a stand-in parser; see the article.
 
 The Aetherix repository is private. Lore's runs are replayable:
 

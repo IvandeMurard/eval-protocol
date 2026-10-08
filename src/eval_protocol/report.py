@@ -19,6 +19,9 @@ def render(verdict: Verdict, comparison: Comparison | None = None, target: str =
             )
         lines.append("")
 
+    if verdict.coverage is not None:
+        lines += [f"Category coverage: {verdict.coverage * 100:.0f}%", ""]
+
     if verdict.reasons:
         lines += [f"- {r}" for r in verdict.reasons] + [""]
 

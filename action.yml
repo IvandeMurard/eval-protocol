@@ -1,0 +1,55 @@
+name: eval-protocol gate
+description: Turn an evaluation run into a tiered verdict, write it to the job summary, and block the merge on FAIL or ERROR.
+branding:
+  icon: shield
+  color: gray-dark
+inputs:
+  results:
+    description: Results JSON written by your harness ({target, checks:[{case_id, grader, passed, category?}]}).
+    required: true
+  protocol:
+    description: Protocol JSON (tiers, thresholds, optional coverage). Empty uses three generic tiers.
+    required: false
+    default: ""
+  baseline:
+    description: Frozen baseline JSON. A regression beyond the budget is a FAIL.
+    required: false
+    default: ""
+  block-on-warn:
+    description: Set to "true" to block on WARN (exit 3) as well.
+    required: false
+    default: "false"
+outputs:
+  exit-code:
+    description: 0 PASS, 1 FAIL, 2 ERROR, 3 WARN.
+    value: ${{ steps.verdict.outputs.code }}
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - shell: bash
+      run: pip install --quiet "$ACTION_PATH"
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+    - id: verdict
+      shell: bash
+      env:
+        RESULTS: ${{ inputs.results }}
+        PROTOCOL: ${{ inputs.protocol }}
+        BASELINE: ${{ inputs.baseline }}
+        BLOCK_ON_WARN: ${{ inputs.block-on-warn }}
+      run: |
+        set +e
+        args=("$RESULTS" --md "$RUNNER_TEMP/verdict.md")
+        [ -n "$PROTOCOL" ] && args+=(--protocol "$PROTOCOL")
+        [ -n "$BASELINE" ] && args+=(--baseline "$BASELINE")
+        eval-protocol verdict "${args[@]}"
+        code=$?
+        echo "code=$code" >> "$GITHUB_OUTPUT"
+        [ -f "$RUNNER_TEMP/verdict.md" ] && cat "$RUNNER_TEMP/verdict.md" >> "$GITHUB_STEP_SUMMARY"
+        # 1 FAIL and 2 ERROR always block: a crash is not a pass, silence never reads as green.
+        if [ "$code" = "1" ] || [ "$code" = "2" ]; then exit 1; fi
+        if [ "$code" = "3" ] && [ "$BLOCK_ON_WARN" = "true" ]; then exit 1; fi
+        exit 0

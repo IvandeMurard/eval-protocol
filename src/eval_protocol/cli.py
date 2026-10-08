@@ -9,6 +9,7 @@ from . import baseline as bl
 from . import canary as cn
 from . import dataset as ds
 from . import report
+from . import select as sel
 from .scaffold import scaffold
 from .tiers import (
     DEFAULT_PROTOCOL,
@@ -98,6 +99,21 @@ def cmd_validate(args: argparse.Namespace) -> int:
     return PASS
 
 
+def cmd_select(args: argparse.Namespace) -> int:
+    config = sel.load_config(args.config)
+    changed = args.files if args.files else sel.changed_files(args.base)
+    labels = [l.strip() for l in (args.labels or "").split(",") if l.strip()]
+    cache = sel.load_cache(args.cache) if args.cache else None
+    print(sel.select(changed, config, labels, cache).to_json())
+    return PASS
+
+
+def cmd_cache_record(args: argparse.Namespace) -> int:
+    sel.record_cache(args.cache, args.key, args.verdict)
+    print(f"recorded {args.key[:12]}… as {args.verdict}")
+    return PASS
+
+
 def cmd_init(args: argparse.Namespace) -> int:
     created, skipped = scaffold(Path(args.directory))
     for p in created:
@@ -137,6 +153,20 @@ def build_parser() -> argparse.ArgumentParser:
     d = sub.add_parser("validate-dataset", help="check a JSONL case set is well formed")
     d.add_argument("dataset")
     d.set_defaults(func=cmd_validate)
+
+    s = sub.add_parser("select", help="decide whether a change needs an eval run, and which layers (JSON on stdout)")
+    s.add_argument("--config", required=True, help="trigger config JSON")
+    s.add_argument("--base", default="origin/main", help="git ref to diff against")
+    s.add_argument("--files", nargs="*", help="changed files, instead of a git diff")
+    s.add_argument("--labels", help="comma-separated pull-request labels")
+    s.add_argument("--cache", help="cache JSON of already-evaluated keys")
+    s.set_defaults(func=cmd_select)
+
+    r = sub.add_parser("cache-record", help="remember that a cache key was evaluated")
+    r.add_argument("key")
+    r.add_argument("--cache", required=True)
+    r.add_argument("--verdict", default="PASS")
+    r.set_defaults(func=cmd_cache_record)
 
     i = sub.add_parser("init", help="scaffold eval/ (protocol, case set, baselines) and a CI gate template")
     i.add_argument("directory", nargs="?", default=".")

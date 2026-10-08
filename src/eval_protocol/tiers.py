@@ -52,6 +52,10 @@ class Protocol:
     tiers: tuple[Tier, ...]
     max_regression_pp: float = 3.0
     canary_runs: int = 3
+    # Category coverage: share of case categories with at least one fully passing
+    # case. None disables the rule.
+    coverage_warn_below: float | None = None
+    coverage_fail_below: float | None = None
 
     def tier_of(self, grader: str) -> int:
         for spec in self.tiers:
@@ -101,7 +105,13 @@ def load_protocol(path: str | Path) -> Protocol:
         tiers=tuple(sorted(tiers, key=lambda t: t.tier)),
         max_regression_pp=float(raw.get("max_regression_pp", 3.0)),
         canary_runs=int(raw.get("canary_runs", 3)),
+        coverage_warn_below=_opt_float(raw.get("coverage", {}).get("warn_below")),
+        coverage_fail_below=_opt_float(raw.get("coverage", {}).get("fail_below")),
     )
+
+
+def _opt_float(value) -> float | None:
+    return None if value is None else float(value)
 
 
 @dataclass(frozen=True)
@@ -110,6 +120,7 @@ class Check:
     grader: str
     passed: bool
     reason: str = ""
+    category: str = ""
 
 
 @dataclass
@@ -135,6 +146,7 @@ def load_results(path: str | Path) -> Results:
                 grader=str(c["grader"]),
                 passed=bool(c["passed"]),
                 reason=str(c.get("reason", "")),
+                category=str(c.get("category", "")),
             )
             for c in raw["checks"]
         ]
@@ -165,6 +177,7 @@ class Verdict:
     reasons: list[str]
     tiers: list[TierResult]
     unmapped_graders: list[str] = field(default_factory=list)
+    coverage: float | None = None
 
     @property
     def label(self) -> str:
@@ -228,9 +241,44 @@ def evaluate(results: Results, protocol: Protocol = DEFAULT_PROTOCOL) -> Verdict
                     f"{t.rate * 100:.1f}%, but not clean"
                 )
 
+    coverage = None
+    if protocol.coverage_warn_below is not None or protocol.coverage_fail_below is not None:
+        code, coverage = _apply_coverage(results, protocol, code, reasons)
+
     return Verdict(
         code=code,
         reasons=reasons,
         tiers=tiers,
         unmapped_graders=protocol.unmapped(c.grader for c in results.checks),
+        coverage=coverage,
     )
+
+
+def _apply_coverage(results: Results, protocol: Protocol, code: int, reasons: list[str]) -> tuple[int, float | None]:
+    """Coverage counted by category, not by line.
+
+    A category is covered when at least one of its cases passes every check.
+    Line coverage says a test touched the code; category coverage says whether
+    the system was shown to handle each kind of situation at all.
+    """
+    by_case: dict[str, tuple[str, bool]] = {}
+    for c in results.checks:
+        if not c.category:
+            continue
+        cat, ok = by_case.get(c.case_id, (c.category, True))
+        by_case[c.case_id] = (cat, ok and c.passed)
+    categories = {cat for cat, _ in by_case.values()}
+    if not categories:
+        reasons.append("coverage is configured but no check carries a category: coverage not measured")
+        return (WARN if code == PASS else code), None
+
+    covered = {cat for cat, ok in by_case.values() if ok}
+    coverage = len(covered) / len(categories)
+    missing = ", ".join(sorted(categories - covered)) or "none"
+    if protocol.coverage_fail_below is not None and coverage < protocol.coverage_fail_below:
+        reasons.append(f"category coverage {coverage * 100:.0f}% is below {protocol.coverage_fail_below * 100:.0f}% (uncovered: {missing})")
+        return (code if code == ERROR else FAIL), coverage
+    if protocol.coverage_warn_below is not None and coverage < protocol.coverage_warn_below:
+        reasons.append(f"category coverage {coverage * 100:.0f}% is below {protocol.coverage_warn_below * 100:.0f}% (uncovered: {missing})")
+        return (WARN if code == PASS else code), coverage
+    return code, coverage

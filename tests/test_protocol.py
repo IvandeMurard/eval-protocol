@@ -250,7 +250,7 @@ class CliTests(unittest.TestCase):
 
     def test_init_scaffolds_and_never_overwrites(self):
         created, skipped = scaffold(self.dir)
-        self.assertEqual(len(created), 4)
+        self.assertEqual(len(created), 5)
         self.assertEqual(skipped, [])
         (self.dir / "eval" / "protocol.json").write_text("{}", encoding="utf-8")
         created, skipped = scaffold(self.dir)

@@ -45,6 +45,27 @@ eval-protocol freeze run1.json run2.json run3.json --out eval/baselines/offline.
 eval-protocol verdict results.json --protocol eval/protocol.json --baseline eval/baselines/offline.json
 ```
 
+## Use it in CI
+
+Two steps: decide whether the change needs a run, then gate on the verdict.
+
+```yaml
+- run: pip install git+https://github.com/IvandeMurard/eval-protocol
+- id: pick
+  run: echo "json=$(eval-protocol select --config eval/triggers.json --base origin/${{ github.base_ref }} --labels '${{ join(github.event.pull_request.labels.*.name, ',') }}' | tr -d '\n')" >> "$GITHUB_OUTPUT"
+# run your harness only when fromJSON(steps.pick.outputs.json).skip is false, writing eval/results.json
+- if: ${{ !fromJSON(steps.pick.outputs.json).skip }}
+  uses: IvandeMurard/eval-protocol@main
+  with:
+    results: eval/results.json
+    protocol: eval/protocol.json
+    baseline: eval/baselines/offline.json
+```
+
+`select` matches changed files against trigger paths (`eval/triggers.json`), skips on an `eval-exempt` label, and skips when the touched files are byte-identical to an evaluated run (`--cache`, filled with `cache-record`). The action writes the verdict to the job summary and fails the job on exit 1 or 2. A crash never passes.
+
+Category coverage: add `"coverage": {"warn_below": 0.8, "fail_below": 0.6}` to the protocol and a `category` to each check. A category counts as covered when one of its cases passes every check.
+
 ## Use it from an agent
 
 As Agent Skills (Claude Code, Codex CLI, Gemini CLI, Cursor and other tools that read `SKILL.md`):
@@ -65,6 +86,7 @@ As a Claude Code plugin:
 | `eval-init` | define "working" before the model code: case set, tiers, gate |
 | `eval-canary` | prove the measurement holds still, and freeze a baseline safely |
 | `eval-audit` | find the ways an eval setup lies |
+| `eval-diagnose` | find the first gap, in six questions asked in dependency order |
 
 The install commands above follow the documentation of those tools and have not been tested end to end yet.
 
@@ -74,7 +96,9 @@ The install commands above follow the documentation of those tools and have not 
 - It does not cover the runtime or outcome arms of evaluation (production signals, whether reality proved the output right). It is the offline gate.
 - It is v0.1, extracted from two systems by one author. Treat it as a reference implementation, not a standard.
 
-Not ported yet: path-triggered gating with a hash cache, category coverage, a calibrated LLM-judge check, drift tests.
+Not ported yet: a calibrated LLM-judge check, drift tests, a sticky pull-request comment (the action writes to the job summary instead).
+
+The CI action and the install commands follow GitHub's and each tool's documentation; v0.2 has not yet run in a real workflow.
 
 ## Develop
 

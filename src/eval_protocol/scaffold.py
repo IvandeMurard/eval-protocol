@@ -72,8 +72,19 @@ jobs:
 # cannot spend on its own initiative.
 """
 
+TRIGGERS_JSON = """{
+  "layers": ["model"],
+  "triggers": [
+    {"paths": ["REPLACE/model/code/*"], "layers": ["model"]},
+    {"paths": ["prompts/*", "eval/cases.jsonl"], "layers": "all"}
+  ],
+  "exempt_label": "eval-exempt"
+}
+"""
+
 FILES = {
     "eval/protocol.json": PROTOCOL_JSON,
+    "eval/triggers.json": TRIGGERS_JSON,
     "eval/cases.jsonl": CASES_JSONL,
     "eval/baselines/.gitkeep": "",
     ".github/workflows/eval-gate.yml": GATE_YML,
