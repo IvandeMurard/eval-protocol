@@ -1,0 +1,11 @@
+{
+  "name": "eval-protocol",
+  "owner": { "name": "Ivan de Murard" },
+  "plugins": [
+    {
+      "name": "eval-protocol",
+      "source": "./",
+      "description": "Set up, stabilise and audit the evaluation of an LLM agent."
+    }
+  ]
+}
